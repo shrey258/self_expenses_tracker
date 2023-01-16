@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_unnecessary_containers
+
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
@@ -55,9 +57,11 @@ class Chart extends StatelessWidget {
             return Flexible(
               fit: FlexFit.tight,
               child: ChartBar(
-                  e['day'], 
-                  e['amount'], 
-                  totalSpending == 0.0 ? 0.0 : (e['amount'] as double) / totalSpending),
+                  e['day'],
+                  e['amount'],
+                  totalSpending == 0.0
+                      ? 0.0
+                      : (e['amount'] as double) / totalSpending),
             );
           })).toList(),
         ),

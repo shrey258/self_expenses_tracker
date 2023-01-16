@@ -13,56 +13,65 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 600,
-      child: transactions.isEmpty
-          ? Column(
-              children: [
-                Text(
-                  'No transcactions added yet!',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  height: 200,
-                  child: Image.asset(
-                    'assets/images/waiting.png',
-                    fit: BoxFit.cover,
+    return transactions.isEmpty
+        ? LayoutBuilder(
+            builder: (ctx, constraint) {
+              return Column(
+                children: [
+                  Text(
+                    'No transcactions added yet!',
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
-                ),
-              ],
-            )
-          : ListView.builder(
-              itemBuilder: (ctx, index) {
-                return Card(
-                  elevation: 5,
-                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 30,
-                      child: Padding(
-                        padding: EdgeInsets.all(16),
-                        child: FittedBox(
-                            child: Text('\$${transactions[index].amount}')),
-                      ),
-                    ),
-                    title: Text(transactions[index].title,
-                        style: Theme.of(context).textTheme.titleLarge),
-                    subtitle: Text(
-                      DateFormat.yMMMd().format(transactions[index].date),
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      color: Theme.of(context).errorColor,
-                      onPressed: (() => delete(transactions[index].id)) ,
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: constraint.maxHeight * 0.6,
+                    child: Image.asset(
+                      'assets/images/waiting.png',
+                      fit: BoxFit.cover,
                     ),
                   ),
-                );
-              },
-              itemCount: transactions.length,
-            ),
-    );
+                ],
+              );
+            },
+          )
+        : ListView.builder(
+            itemBuilder: (ctx, index) {
+              return Card(
+                elevation: 5,
+                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    radius: 30,
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: FittedBox(
+                          child: Text('\$${transactions[index].amount}')),
+                    ),
+                  ),
+                  title: Text(transactions[index].title,
+                      style: Theme.of(context).textTheme.titleLarge),
+                  subtitle: Text(
+                    DateFormat.yMMMd().format(transactions[index].date),
+                  ),
+                  trailing: MediaQuery.of(context).size.width > 460
+                      ? TextButton.icon(
+                          onPressed: (() => delete(transactions[index].id)),
+                          icon: Icon(Icons.delete),
+                          label: Text('Delete'),
+                          style:
+                              TextButton.styleFrom(foregroundColor: Colors.red),
+                        )
+                      : IconButton(
+                          icon: Icon(Icons.delete),
+                          color: Theme.of(context).errorColor,
+                          onPressed: (() => delete(transactions[index].id)),
+                        ),
+                ),
+              );
+            },
+            itemCount: transactions.length,
+          );
   }
 }
